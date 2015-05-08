@@ -9,4 +9,6 @@
     <string name="save_text">Enregistrer</string>
     <string name="Default.assessment.hint">Ecrire ici votre réponse.</string>
     <string name="log_day">Ajouter un enregistrement</string>
+    <string name="log_saved">Sauvegardé</string>
+    <string name="log_not_saved">Echec sauvegarde</string>
 </resources>
