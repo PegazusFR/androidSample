@@ -1,5 +1,6 @@
 package galaxy.pegazus.bienetre;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 
 public class SaveDay extends ActionBarActivity {
@@ -65,8 +67,20 @@ public class SaveDay extends ActionBarActivity {
         // TODO : enregistrer dans un fichier le resultat .. dans base sqllite ?
 
         // dire à la vue qu'un enregistrement est effectué
-        intent.putExtra(SAVED_DAY, true);
+        intent.putExtra(SAVED_DAY, R.string.log_saved);
+
+
+        //Intent intent = getIntent();
+        //String feedback = intent.getStringExtra(SaveDay.SAVED_DAY);
+        // if ok or not,we need to inform the user for the succes/fail of the actions.
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, getString(R.string.log_saved), duration);
+        toast.show();
         startActivity(intent);
+
+
+
     }
 
 
