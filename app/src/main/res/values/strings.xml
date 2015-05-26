@@ -11,4 +11,6 @@
     <string name="log_day">log a record day</string>
     <string name="log_saved">Saved</string>
     <string name="log_not_saved">fail save !</string>
+    <string name="display_logs">display logs</string>
+    <string name="title_activity_display_logs">display_logs</string>
 </resources>
