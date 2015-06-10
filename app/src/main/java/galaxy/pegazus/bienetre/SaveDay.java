@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import galaxy.pegazus.bienetre.data.LogDay;
@@ -51,8 +53,9 @@ public class SaveDay extends ActionBarActivity {
             seekBar.setProgress(log.getAssessment());
             editText.setText(log.getComment());
 
+            Log.i("Dev","      "+(log.getDate()*1000));
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(log.getDate());
+            calendar.setTimeInMillis(log.getDate()*1000);
 
             Log.i("Dev", "date from epoche =" + log.getDate() + "     deduction=" + calendar.toString());
 
@@ -60,7 +63,7 @@ public class SaveDay extends ActionBarActivity {
             datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
                     0, 0, 0);
-            log.setDate((int) calendar.getTimeInMillis());
+            log.setDate( calendar.getTimeInMillis());
 
 
         }
@@ -113,16 +116,15 @@ public class SaveDay extends ActionBarActivity {
 
         // process date
         Calendar calendar = Calendar.getInstance();
-
-
-
-        calendar.set(datePicker.getYear(), datePicker.getMonth() , datePicker.getDayOfMonth());
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
 
         Log.i("DEVVVV", "date year " + datePicker.getYear() + " month" + datePicker.getMonth() + "  day " + datePicker.getDayOfMonth() + "   epoch = " + (int) calendar.getTimeInMillis());
 
-        Log.i("DEVVVV","  ... "+calendar.getDisplayName(Calendar.DATE,Calendar.LONG, Locale.FRANCE));
+        Log.i("DEVVVV", "  ... " + calendar.get(Calendar.MONTH));
 
-        log.setDate((int) calendar.getTimeInMillis());
+        Long tmp = calendar.getTimeInMillis();
+
+        log.setDate(tmp/1000 );
 
         long inserted = db.insertLog(log);
 

@@ -18,13 +18,15 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
+    private static final String NUMERIC_TYPE = " NUMERIC";
+
 
 
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + LogDay.LogDayEntry.TABLE_NAME + " (" +
                     LogDay.LogDayEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    LogDay.LogDayEntry.COLUMN_NAME_DATE + INTEGER_TYPE + COMMA_SEP +
+                    LogDay.LogDayEntry.COLUMN_NAME_DATE + NUMERIC_TYPE + COMMA_SEP +
                     LogDay.LogDayEntry.COLUMN_NAME_ASSESSMENT + INTEGER_TYPE + COMMA_SEP +
                     LogDay.LogDayEntry.COLUMN_NAME_COMMENT + TEXT_TYPE +
                     " )";
@@ -119,7 +121,7 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
             do {
                 logday = new LogDay();
                 logday.set_id(cursor.getInt(0));
-                logday.setDate(cursor.getInt(1));
+                logday.setDate(cursor.getLong(1));
                 logday.setAssessment(cursor.getInt(2));
                 logday.setComment(cursor.getString(3));
                 logs.add(logday);
@@ -143,7 +145,7 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 resulat.set_id(cursor.getInt(0));
-                resulat.setDate(cursor.getInt(1));
+                resulat.setDate(cursor.getLong(1));
                 resulat.setAssessment(cursor.getInt(2));
                 resulat.setComment(cursor.getString(3));
 
