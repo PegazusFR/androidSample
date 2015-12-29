@@ -61,7 +61,7 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
 
 
     /**
-     * Insert  an {@LogDayEntity}
+     * Insert  an {@LogDay}
      * @param logDay
      * @return
      */
@@ -74,12 +74,12 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
         values.put(LogDay.LogDayEntry.COLUMN_NAME_ASSESSMENT, logDay.getAssessment());
         values.put(LogDay.LogDayEntry.COLUMN_NAME_COMMENT, logDay.getComment());
         // insertion
-        long resulat = db.insert(LogDay.LogDayEntry.TABLE_NAME, // table
+        long result = db.insert(LogDay.LogDayEntry.TABLE_NAME, // table
                 null, values);
 
         db.close();
         Log.i("SQLiteDB:Add: id=", logDay.toString());
-        return resulat;
+        return result;
     }
 
     /**
@@ -96,11 +96,11 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
         values.put(LogDay.LogDayEntry.COLUMN_NAME_ASSESSMENT, logDay.getAssessment());
         values.put(LogDay.LogDayEntry.COLUMN_NAME_COMMENT, logDay.getComment());
         // insertion
-        int resulat = db.update(LogDay.LogDayEntry.TABLE_NAME, values, " _is=? ", new String[]{String.valueOf(logDay.get_id())});
+        int result = db.update(LogDay.LogDayEntry.TABLE_NAME, values, " _id= ? ", new String[]{logDay.get_id().toString()});
 
         db.close();
         Log.i("SQLiteDB:Update:id=  ", logDay.toString());
-        return resulat;
+        return result;
     }
 
 
@@ -162,6 +162,7 @@ public class LogDayDBHelper extends SQLiteOpenHelper {
      * @return cursor
      */
     public Cursor showAllcursor() {
+
         List<LogDay> logs = new LinkedList<LogDay>();
         String query = "SELECT _id , date FROM " + LogDay.LogDayEntry.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();

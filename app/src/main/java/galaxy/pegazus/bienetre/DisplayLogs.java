@@ -60,9 +60,6 @@ public class DisplayLogs extends ListActivity {
             intent.putExtra(EXTRA_MSG_ID, selectedItems.getString(0));
             startActivity(intent);
 
-
-
-
         }else{
             Toast.makeText(getApplicationContext(),
                     "Click ListItem Number " + position+ " idclick="+id, Toast.LENGTH_LONG )

@@ -7,6 +7,13 @@
     <string name="test_assessment">Evaluate your sleeping :</string>
     <string name="Default.assessment.text">How are you feeling ?</string>
     <string name="save_text">Save</string>
+    <string name="edit_text">Modify</string>
     <string name="Default.assessment.hint">Write here your answer.</string>
     <string name="log_day">log a record day</string>
+    <string name="log_saved">Saved</string>
+    <string name="log_not_saved">Not saved</string>
+    <string name="log_not_modified">Not modified</string>
+    <string name="log_modified">Save modifications</string>
+    <string name="display_logs">Display logs </string>
+    <string name="title_activity_display_logs">Logs List :</string>
 </resources>

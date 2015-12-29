@@ -81,13 +81,21 @@
         </TableRow>
 
         <TableRow>
-
             <Button
                 android:layout_weight="1"
                 android:id="@+id/save_button"
                 android:text="@string/save_text"
-                android:onClick="saveDay" />
+                android:onClick="saveDay"
+                android:visibility="invisible"/>
+        </TableRow>
 
+        <TableRow>
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/edit_button"
+                android:text="@string/edit_text"
+                android:onClick="editDay"
+                android:visibility="invisible"/>
         </TableRow>
     </TableLayout>
 </RelativeLayout>

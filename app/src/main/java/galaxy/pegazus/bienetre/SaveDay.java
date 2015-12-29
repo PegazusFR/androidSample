@@ -1,20 +1,23 @@
 package galaxy.pegazus.bienetre;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import junit.runner.Version;
+
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import galaxy.pegazus.bienetre.data.LogDay;
 import galaxy.pegazus.bienetre.data.LogDayDBHelper;
@@ -37,7 +40,7 @@ public class SaveDay extends ActionBarActivity {
         // si on edite les données
         if(id_ != null){
 
-            Log.i("Dev", "affichage mode !!!"+ id_);
+            Log.i("Dev", "affichage mode !!!" + id_);
 
             Log.i("Dev", "affichage mode !!!");
             LogDayDBHelper db = new LogDayDBHelper(getApplicationContext());
@@ -47,6 +50,7 @@ public class SaveDay extends ActionBarActivity {
             DatePicker datePicker=(DatePicker)  findViewById(R.id.date);
             EditText editText = (EditText)  findViewById(R.id.editText);
 
+            findViewById(R.id.edit_button).setVisibility(View.VISIBLE);
             seekBar.setProgress(log.getAssessment());
             editText.setText(log.getComment());
 
@@ -61,8 +65,8 @@ public class SaveDay extends ActionBarActivity {
             calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
                     0, 0, 0);
             log.setDate( calendar.getTimeInMillis());
-
-
+        }else{
+            findViewById(R.id.save_button).setVisibility(View.VISIBLE);
         }
 
     }
@@ -95,8 +99,29 @@ public class SaveDay extends ActionBarActivity {
      * Called when the user clicks the ave button
      */
     public void saveDay(View view) {
-        // TODO : faire une page d'aceuil agréable qui ouvre cette activity
+        LogDay log = getLogDay();
+        Context context = getApplicationContext();
+        LogDayDBHelper db = new LogDayDBHelper(context);
+        long inserted = db.insertLog(log);
         Intent intent = new Intent(this, Welcome.class);
+        // dire à la vue qu'un enregistrement est effectué
+        Toast toast;
+        if(inserted == -1){
+            intent.putExtra(SAVED_DAY, R.string.log_not_saved);
+            toast = Toast.makeText(context, getString(R.string.log_not_saved), Toast.LENGTH_SHORT);
+        }else{
+            intent.putExtra(SAVED_DAY, R.string.log_saved);
+            toast = Toast.makeText(context, getString(R.string.log_saved), Toast.LENGTH_SHORT);
+        }
+        //Intent intent = getIntent();
+        //String feedback = intent.getStringExtra(SaveDay.SAVED_DAY);
+        // if ok or not,we need to inform the user for the succes/fail of the actions.
+        toast.show();
+        startActivity(intent);
+    }
+
+    private LogDay getLogDay() {
+        // TODO : faire une page d'aceuil agréable qui ouvre cette activity
 
         // data retrievment
         SeekBar seekBar= (SeekBar) findViewById(R.id.seekBar_sleeping);
@@ -104,12 +129,10 @@ public class SaveDay extends ActionBarActivity {
         EditText editText = (EditText)  findViewById(R.id.editText);
 
         // TODO : enregistrer dans un fichier le resultat .. dans base sqllite ?
-        LogDayDBHelper db = new LogDayDBHelper(getApplicationContext());
+
         LogDay log = new LogDay();
         log.setComment(editText.getText().toString());
         log.setAssessment(seekBar.getProgress());
-
-
 
         // process date
         Calendar calendar = Calendar.getInstance();
@@ -121,30 +144,35 @@ public class SaveDay extends ActionBarActivity {
 
         Long tmp = calendar.getTimeInMillis();
 
-        log.setDate(tmp/1000 );
+        log.setDate(tmp / 1000);
 
-        long inserted = db.insertLog(log);
-
-        // dire à la vue qu'un enregistrement est effectué
-        if(inserted == -1){
-            intent.putExtra(SAVED_DAY, R.string.log_not_saved);
-        }else{
-            intent.putExtra(SAVED_DAY, R.string.log_saved);
+        if(id_ != null) {
+            log.set_id(Integer.parseInt(id_));
         }
+        return log;
+    }
 
 
-
+    public void editDay(View view){
+        LogDay log = getLogDay();
+        Context context = getApplicationContext();
+        LogDayDBHelper db = new LogDayDBHelper(context);
+        long updatedLines = db.updateLog(log);
+        Intent intent = new Intent(this, Welcome.class);
+        // dire à la vue qu'un enregistrement est effectué
+        Toast toast = null;
+        if(updatedLines != 1){
+            intent.putExtra(SAVED_DAY, R.string.log_not_modified);
+            toast = Toast.makeText(context, getString(R.string.log_not_modified), Toast.LENGTH_SHORT);
+        }else{
+            intent.putExtra(SAVED_DAY, R.string.log_modified);
+            toast = Toast.makeText(context, getString(R.string.log_modified), Toast.LENGTH_SHORT);
+        }
         //Intent intent = getIntent();
         //String feedback = intent.getStringExtra(SaveDay.SAVED_DAY);
         // if ok or not,we need to inform the user for the succes/fail of the actions.
-        Context context = getApplicationContext();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, getString(R.string.log_saved), duration);
         toast.show();
         startActivity(intent);
-
-
-
     }
 
 
