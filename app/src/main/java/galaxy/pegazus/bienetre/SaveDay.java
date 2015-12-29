@@ -12,16 +12,59 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
+import galaxy.pegazus.bienetre.data.LogDay;
+import galaxy.pegazus.bienetre.data.LogDayDBHelper;
+
 
 public class SaveDay extends ActionBarActivity {
 
     public final static String SAVED_DAY = "galaxy.pegazus.bienetre.SAVED";
-
+    private String id_ = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_day);
+
+        // Get the message from the intent
+        Intent intent = getIntent();
+        id_ = intent.getStringExtra(DisplayLogs.EXTRA_MSG_ID);
+
+        // si on edite les données
+        if(id_ != null){
+
+            Log.i("Dev", "affichage mode !!!"+ id_);
+
+            Log.i("Dev", "affichage mode !!!");
+            LogDayDBHelper db = new LogDayDBHelper(getApplicationContext());
+            LogDay log = db.getLog(id_);
+
+            SeekBar seekBar= (SeekBar) findViewById(R.id.seekBar_sleeping);
+            DatePicker datePicker=(DatePicker)  findViewById(R.id.date);
+            EditText editText = (EditText)  findViewById(R.id.editText);
+
+            seekBar.setProgress(log.getAssessment());
+            editText.setText(log.getComment());
+
+            Log.i("Dev","      "+(log.getDate()*1000));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(log.getDate()*1000);
+
+            Log.i("Dev", "date from epoche =" + log.getDate() + "     deduction=" + calendar.toString());
+
+             Log.i("Dev", calendar.get(Calendar.YEAR)+"   "+calendar.get(Calendar.MONTH)+"   "+calendar.get(Calendar.DAY_OF_MONTH));
+            datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                    0, 0, 0);
+            log.setDate( calendar.getTimeInMillis());
+
+
+        }
+
     }
 
 
@@ -54,20 +97,41 @@ public class SaveDay extends ActionBarActivity {
     public void saveDay(View view) {
         // TODO : faire une page d'aceuil agréable qui ouvre cette activity
         Intent intent = new Intent(this, Welcome.class);
-        // récupération de l'etat du reveil
-        SeekBar bar = (SeekBar) findViewById(R.id.seekBar_sleeping);
-        int valeurEtat = bar.getProgress();
-        // date de l'évaluation
-        DatePicker dateEvaluation = (DatePicker) findViewById(R.id.date);
 
-        // récupération du commentaire
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
+        // data retrievment
+        SeekBar seekBar= (SeekBar) findViewById(R.id.seekBar_sleeping);
+        DatePicker datePicker=(DatePicker)  findViewById(R.id.date);
+        EditText editText = (EditText)  findViewById(R.id.editText);
 
         // TODO : enregistrer dans un fichier le resultat .. dans base sqllite ?
+        LogDayDBHelper db = new LogDayDBHelper(getApplicationContext());
+        LogDay log = new LogDay();
+        log.setComment(editText.getText().toString());
+        log.setAssessment(seekBar.getProgress());
+
+
+
+        // process date
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+
+        Log.i("DEVVVV", "date year " + datePicker.getYear() + " month" + datePicker.getMonth() + "  day " + datePicker.getDayOfMonth() + "   epoch = " + (int) calendar.getTimeInMillis());
+
+        Log.i("DEVVVV", "  ... " + calendar.get(Calendar.MONTH));
+
+        Long tmp = calendar.getTimeInMillis();
+
+        log.setDate(tmp/1000 );
+
+        long inserted = db.insertLog(log);
 
         // dire à la vue qu'un enregistrement est effectué
-        intent.putExtra(SAVED_DAY, R.string.log_saved);
+        if(inserted == -1){
+            intent.putExtra(SAVED_DAY, R.string.log_not_saved);
+        }else{
+            intent.putExtra(SAVED_DAY, R.string.log_saved);
+        }
+
 
 
         //Intent intent = getIntent();

@@ -19,8 +19,6 @@ public class Welcome extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-
-
     }
 
 
@@ -50,6 +48,12 @@ public class Welcome extends ActionBarActivity {
     public void logDay(View view) {
         Intent intent = new Intent(this, SaveDay.class);
         startActivity(intent);
+    }
+
+    public void displayLogs(View view){
+        Intent intent = new Intent(this, DisplayLogs.class);
+        startActivity(intent);
+
     }
 
 }

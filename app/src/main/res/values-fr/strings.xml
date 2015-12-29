@@ -11,4 +11,5 @@
     <string name="log_day">Ajouter un enregistrement</string>
     <string name="log_saved">Sauvegardé</string>
     <string name="log_not_saved">Echec sauvegarde</string>
+    <string name="display_logs">Afficher les logs</string>
 </resources>

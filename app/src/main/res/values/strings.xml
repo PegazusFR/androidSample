@@ -9,6 +9,4 @@
     <string name="save_text">Save</string>
     <string name="Default.assessment.hint">Write here your answer.</string>
     <string name="log_day">log a record day</string>
-    <string name="log_saved">Saved</string>
-    <string name="log_not_saved">fail save !</string>
 </resources>
